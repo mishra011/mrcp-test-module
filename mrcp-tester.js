@@ -4,7 +4,8 @@ var fs = require('fs');
 var net = require('net');
 
 var port = 1339;
-var host = "locahost";
+var host = "localhost";
+var sleep = require('system-sleep');
 
 
 var connect_params = {host:host, port:port};
@@ -12,7 +13,7 @@ console.log("Connect Params :: ", connect_params);
 
 var filePath = "wavs/test.wav";
 //filePath = "wavs/hello.wav"
-filePath = "wavs/test_trimmed.wav"
+//filePath = "wavs/test_trimmed.wav"
 
 
 var thisUniqueSessionId = crypto.randomUUID();
@@ -21,9 +22,9 @@ var language = "en-IN";
 //language = "en-IN|||hi-IN";
 //language = "hi-IN";
 
-var grammar = "test.json";
+var grammar = "test.json/yes";
 var thisBotId = "testbotdummy";
-var thisBotSessionId = crypto.randomUUID();
+var thisBotSessionId = "MOB_NUM--" + crypto.randomUUID();
 
 var asrName = "ameyo";
 //asrName = "google";
@@ -32,25 +33,35 @@ let asrInput = `${thisUniqueSessionId},${nBestListLength},${language},${grammar}
 
 console.log("MRCP HEADER :: ", asrInput);
 
-
-
+var earlyExit = true;
+earlyExit = false;
 var client = net.connect(connect_params, async function() {
    console.log('connected to MRCP server!');
    client.write(asrInput);
-   
+   //sleep(5000);
+
+    if (earlyExit){
+   	client.end();
+   }
+   else {
    fs.readFile(filePath, (err, data) => {
       console.log("Sending media chunks to Mrcp Server")
       //console.log(data);
       client.write(data);
-    });       
-    
+   
+    });  
+	if (false){
+		client.end();
+	};	
+    }     
+  
 
 });
 
 client.on('data', function(data) {
    console.log("Data Received from Server ::");
    console.log(data.toString());
-   client.end();
+   //client.end();
 });
 
 client.on('end', function() { 
@@ -60,17 +71,3 @@ client.on('end', function() {
 
 
 
-/*** 
-var net = require('net');
-var fs = require('fs');
-
-convertBotResponseToASRInput_STR(botResp, customProps, thisBotId, thisBotSessionId, thisUniqueSessionId) {
-    console.log("====  ASR INP :: STRING === ");
-    let nBestListLength = ('nBestListLength' in customProps)? customProps.nBestListLength: 1;
-    let language = botResp.languageCode;
-    let grammar = ('defaultASRGrammar' in customProps)? customProps.defaultASRGrammar: botResp.nextAsrGrammar;
-    let asrInput = `${thisUniqueSessionId},${nBestListLength},${language},${grammar}-----${language}--${thisBotId}--${thisBotSessionId}\n`;
-    return asrInput;
-}
-
-***/
