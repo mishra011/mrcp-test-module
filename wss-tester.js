@@ -14,22 +14,22 @@ console.log("Connect Params :: ", connect_params);
 
 var filePath = "wavs/test.wav";
 //filePath = "wavs/hello.wav"
-//filePath = "wavs/test_trimmed.wav"
+filePath = "wavs/test_trimmed.wav"
 //filePath = "128.wav"
 
 
-var thisUniqueSessionId = crypto.randomUUID();
+var thisUniqueSessionId = "ASR-SESS--" +  crypto.randomUUID();
 var nBestListLength = 1;
 var language = "en-IN";
 //language = "en-IN|||hi-IN";
 //language = "hi-IN";
 
-var grammar = [];
+var grammar = [{"phrases":["yes tell me","yes","ok","ok i will do"],"boost":3}];
 var thisBotId = "testbotdummy";
-var thisBotSessionId = "MOB_NUM--" + crypto.randomUUID();
-var callSId = crypto.randomUUID();
+var thisBotSessionId = "BOT-SESS--" + crypto.randomUUID();
+var callSId = "CALL-SID--" + crypto.randomUUID();
 var asrName = "ameyo";
-//asrName = "google";
+asrName = "google";
 
 var barge = false;
 var alt_languages = [language];
@@ -52,7 +52,7 @@ let asrInput = {
    "CallSid": callSId
 
 }
-
+//asrInput = {};
 console.log("ASR INPUT DATA :: ", asrInput);
 
 asrInput = JSON.stringify(asrInput);
@@ -64,7 +64,10 @@ const ws = new WebSocket(url);
 ws.on('open', function open() {
    console.log("SENDING ASR INPUT DATA");
    ws.send(asrInput);
+   //sleep(1000);
+   //ws.close();
 
+  
    fs.readFile(filePath, (err, data) => {
       console.log("Sending media chunks to ASR Server")
       //console.log(data);
@@ -72,7 +75,7 @@ ws.on('open', function open() {
 
    //ws.close();
     });      
-
+  
  });
 
 

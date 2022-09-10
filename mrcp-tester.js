@@ -14,7 +14,9 @@ console.log("Connect Params :: ", connect_params);
 var filePath = "wavs/test.wav";
 //filePath = "wavs/hello.wav"
 //filePath = "wavs/test_trimmed.wav"
+//filePath = "yes.wav"
 
+console.log(filePath)
 
 var thisUniqueSessionId = crypto.randomUUID();
 var nBestListLength = 1;
@@ -29,16 +31,20 @@ var thisBotSessionId = "MOB_NUM--" + crypto.randomUUID();
 var asrName = "ameyo";
 //asrName = "google";
 
+//asrName = "reverie";
+
 let asrInput = `${thisUniqueSessionId},${nBestListLength},${language},${grammar}-----${language}--${thisBotId}--${thisBotSessionId}-----${asrName}\n`;
 
 console.log("MRCP HEADER :: ", asrInput);
 
 var earlyExit = true;
 earlyExit = false;
+
+
 var client = net.connect(connect_params, async function() {
    console.log('connected to MRCP server!');
    client.write(asrInput);
-   //sleep(5000);
+   //sleep(15000);
 
     if (earlyExit){
    	client.end();
@@ -48,7 +54,8 @@ var client = net.connect(connect_params, async function() {
       console.log("Sending media chunks to Mrcp Server")
       //console.log(data);
       client.write(data);
-   
+      //client.write(data.toString());
+
     });  
 	if (false){
 		client.end();
