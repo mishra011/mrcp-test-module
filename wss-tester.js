@@ -18,24 +18,25 @@ filePath = "wavs/test_trimmed.wav"
 //filePath = "128.wav"
 
 
-var thisUniqueSessionId = "ASR-SESS--" +  crypto.randomUUID();
+var thisUniqueSessionId = "asr-sess-" +  crypto.randomUUID();
 var nBestListLength = 1;
 var language = "en-IN";
-//language = "en-IN|||hi-IN";
 //language = "hi-IN";
 
 var grammar = [{"phrases":["yes tell me","yes","ok","ok i will do"],"boost":3}];
-var thisBotId = "testbotdummy";
-var thisBotSessionId = "BOT-SESS--" + crypto.randomUUID();
-var callSId = "CALL-SID--" + crypto.randomUUID();
+var thisBotId = "https://app.getcogno.ai/chat/voicebot/dummy";
+var thisBotSessionId = "bot-sess-" + crypto.randomUUID();
+var callSId = "callsid-" + crypto.randomUUID();
 var asrName = "ameyo";
 asrName = "google";
 
-var barge = false;
+var barge = true;
 var alt_languages = [language];
-//let asrInput = `${thisUniqueSessionId},${nBestListLength},${language},${grammar}-----${language}--${thisBotId}--${thisBotSessionId}-----${asrName}\n`;
+
+alt_languages = ["hi-IN","en-IN","mr-IN"];
 
 
+if (asrName == "ameyo"){ filePath = "wavs/test.wav"}
 
 
 let asrInput = {
@@ -52,8 +53,10 @@ let asrInput = {
    "CallSid": callSId
 
 }
-//asrInput = {};
+//asrInput = {metadata:{}};
 console.log("ASR INPUT DATA :: ", asrInput);
+
+console.log(filePath)
 
 asrInput = JSON.stringify(asrInput);
 
@@ -81,6 +84,11 @@ ws.on('open', function open() {
 
  ws.on('message', function message(data) {
    console.log('Response Received from Server :: ', data);
+   data = JSON.parse(data);
+   //console.log(data.isFinal)
+   if (data.isFinal){
+   console.log('Final Received') 
    ws.close();
+	}
  });
 

@@ -22,10 +22,12 @@ var thisUniqueSessionId = crypto.randomUUID();
 var nBestListLength = 1;
 var language = "en-IN";
 //language = "en-IN|||hi-IN";
-//language = "hi-IN";
+//language = "hi-IN|||en-IN";
+//language = "mr-IN|||hi-IN|||en-IN";
+//language = "hi-IN|||en-IN|||mr-IN";
 
 var grammar = "test.json/yes";
-var thisBotId = "testbotdummy";
+var thisBotId = "compaas-dummy";
 var thisBotSessionId = "MOB_NUM--" + crypto.randomUUID();
 
 var asrName = "ameyo";
